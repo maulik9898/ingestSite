@@ -1,0 +1,19 @@
+{
+  "name": "ingest-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:frontend": "pnpm -F frontend dev",
+    "dev:backend": "pnpm -F type build && pnpm -F frontend dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=22.14.0"
+  },
+  "type": "module",
+  "packageManager": "pnpm@10.2.1"
+}
