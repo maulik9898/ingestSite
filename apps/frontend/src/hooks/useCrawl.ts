@@ -1,10 +1,9 @@
-import { axiosInstance } from "@/lib/axios";
+import { crawlSite } from "@/api/crawl";
 import { useMutation } from "@tanstack/react-query";
-import type { Crawl200Response, CrawlBody } from "common-types";
+import type { Crawl200Response, CrawlQuery } from "common-types";
 
 export const useCrawl = () => {
-  return useMutation<Crawl200Response, Error, CrawlBody>({
-    mutationFn: (data) =>
-      axiosInstance.post("/crawl", data).then((res) => res.data),
+  return useMutation<Crawl200Response, Error, CrawlQuery>({
+    mutationFn: (data) => crawlSite(data),
   });
 };

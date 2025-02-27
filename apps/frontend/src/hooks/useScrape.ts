@@ -1,9 +1,14 @@
 import { scrapeSite } from "@/api/scrape";
 import { useMutation } from "@tanstack/react-query";
-import type { Scrape200Response, ScrapeBody } from "common-types";
+import type { CrawlerType, Scrape200Response } from "common-types";
+
+interface ScrapeParams {
+  url: string;
+  crawlerType?: CrawlerType;
+}
 
 export const useScrape = () => {
-  return useMutation<Scrape200Response, Error, ScrapeBody>({
-    mutationFn: ({ url }) => scrapeSite(url),
+  return useMutation<Scrape200Response, Error, ScrapeParams>({
+    mutationFn: ({ url, crawlerType = "basic" }) => scrapeSite(url, crawlerType),
   });
 };

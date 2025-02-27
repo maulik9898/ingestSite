@@ -1,6 +1,7 @@
 import type { FastifySchema } from "fastify";
 import { z } from "zod";
 import {
+  CrawlerTypeSchema,
   Error400Schema,
   GenericCrawlerResultSchema,
   GenericCrawlerStatsSchema,
@@ -14,8 +15,9 @@ export const ScrapeConfigSchema = z.object({
   onlyMainContent: z.boolean().optional(),
 });
 
-export const ScrapeBodySchema = z.object({
+export const ScrapeQuerySchema = z.object({
   url: z.string().url(),
+  crawlerType: CrawlerTypeSchema.optional().default("basic"),
 });
 
 export const ScrapeResultSchema = z.object({
@@ -29,7 +31,7 @@ export const Scrape200ResponseSchema = z.object({
 });
 
 export const ScrapeSchema = {
-  body: ScrapeBodySchema,
+  querystring: ScrapeQuerySchema,
   response: {
     200: Scrape200ResponseSchema,
     400: Error400Schema,
@@ -40,4 +42,4 @@ export type ScrapeConfig = z.infer<typeof ScrapeConfigSchema>;
 export type ScrapeResult = z.infer<typeof ScrapeResultSchema>;
 export type Scrape200Response = z.infer<typeof Scrape200ResponseSchema>;
 export type ScrapeRequest = InferRequestType<typeof ScrapeSchema>;
-export type ScrapeBody = z.infer<typeof ScrapeBodySchema>;
+export type ScrapeQuery = z.infer<typeof ScrapeQuerySchema>;

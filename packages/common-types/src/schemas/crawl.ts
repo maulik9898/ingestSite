@@ -47,7 +47,7 @@ export const CrawlSchema = {
 } satisfies FastifySchema;
 
 export type CrawlConfig = z.infer<typeof CrawlConfigSchema>;
-
+export type CrawlQuery = z.infer<typeof CrawlQuerySchema>;
 export type CrawlResult = z.infer<typeof CrawlResultSchema>;
 export type Crawl200Response = z.infer<typeof Crawl200ResponseSchema>;
 

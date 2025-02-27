@@ -8,6 +8,8 @@ import {
   CheerioCrawler,
   type CheerioCrawlingContext,
   type CheerioRoot,
+  Configuration,
+  Dataset,
   LogLevel,
   PlaywrightCrawler,
   type PlaywrightCrawlingContext,
@@ -15,13 +17,13 @@ import {
   Sitemap,
   log,
 } from "crawlee";
-
 import rehypeParse from "rehype-parse";
 import rehypeRemark from "rehype-remark";
 import rehypeRemoveComments from "rehype-remove-comments";
 import remarkGfm from "remark-gfm";
 import remarkStringify from "remark-stringify";
 import { unified } from "unified";
+import { v4 as uuidv4 } from "uuid";
 
 export interface GenericCrawlerConfig {
   /**
@@ -62,39 +64,52 @@ export interface GenericCrawlerConfig {
 export class GenericCrawler {
   // The underlying internal crawler instance (CheerioCrawler or PlaywrightCrawler)
   private crawlerInstance: CheerioCrawler | PlaywrightCrawler;
+  private uniqueKey: string;
 
   constructor(private readonly config: GenericCrawlerConfig) {
     log.setLevel(LogLevel.DEBUG);
+    this.uniqueKey = this.getUniqueKey();
 
     // Decide which low-level crawler to instantiate:
     switch (this.config.crawlerType) {
       case "basic":
-        this.crawlerInstance = new CheerioCrawler({
-          maxRequestsPerCrawl: this.config.maxRequestsPerCrawl,
-          // Provide a “unified” request handler:
-          requestHandler: this.handleRequestCheerio.bind(this),
-          failedRequestHandler: async ({ request }) => {
-            log.error(
-              `Request for ${request.url} failed too many times (Cheerio).`,
-            );
+        this.crawlerInstance = new CheerioCrawler(
+          {
+            maxRequestsPerCrawl: this.config.maxRequestsPerCrawl,
+            // Provide a “unified” request handler:
+            requestHandler: this.handleRequestCheerio.bind(this),
+            failedRequestHandler: async ({ request }) => {
+              log.error(
+                `Request for ${request.url} failed too many times (Cheerio).`,
+              );
+            },
+            // ...spread any custom crawlerOptions if you want
+            ...(this.config.crawlerOptions ?? {}),
           },
-          // ...spread any custom crawlerOptions if you want
-          ...(this.config.crawlerOptions ?? {}),
-        });
+          new Configuration({
+            persistStorage: false,
+          }),
+        );
         break;
 
       case "advance":
-        this.crawlerInstance = new PlaywrightCrawler({
-          maxRequestsPerCrawl: this.config.maxRequestsPerCrawl,
-          requestHandler: this.handleRequestPlaywright.bind(this),
-          failedRequestHandler: async ({ request }) => {
-            log.error(
-              `Request for ${request.url} failed too many times (Playwright).`,
-            );
+        this.crawlerInstance = new PlaywrightCrawler(
+          {
+            headless: false,
+            maxRequestsPerCrawl: this.config.maxRequestsPerCrawl,
+            requestHandler: this.handleRequestPlaywright.bind(this),
+            failedRequestHandler: async ({ request }) => {
+              log.error(
+                `Request for ${request.url} failed too many times (Playwright).`,
+              );
+            },
+            // ...spread any custom crawlerOptions if you want
+            ...(this.config.crawlerOptions ?? {}),
           },
-          // ...spread any custom crawlerOptions if you want
-          ...(this.config.crawlerOptions ?? {}),
-        });
+          new Configuration({
+            persistStorage: false,
+          }),
+        );
         break;
 
       default:
@@ -114,6 +129,15 @@ export class GenericCrawler {
     return String(markdown);
   }
 
+  private getUniqueKey(): string {
+    return uuidv4();
+  }
+
+  private async getDataset(): Promise<Dataset<GenericCrawlerResult>> {
+    const datasetKey = `dataset-${this.uniqueKey}`;
+    return await Dataset.open<GenericCrawlerResult>(datasetKey);
+  }
+
   /**
    * Request handler for the Cheerio-based crawler.
    * We have access to context.$ for HTML parsing, context.body, etc.
@@ -131,7 +155,7 @@ export class GenericCrawler {
     }
 
     // Always push the data we gathered.
-    await pushData(result);
+    await (await this.getDataset()).pushData(result);
 
     // If doCrawl is set, enqueue links from the same domain.
     if (this.config.doCrawl) {
@@ -161,7 +185,7 @@ export class GenericCrawler {
       // Optionally do more complex transformations here if needed
     }
 
-    await pushData(result);
+    await (await this.getDataset()).pushData(result);
 
     if (this.config.doCrawl) {
       await enqueueLinks({
@@ -179,8 +203,8 @@ export class GenericCrawler {
     stats: GenericCrawlerStats;
   }> {
     const { urls } = this.config;
-    const uniqueSuffix = Date.now().toString();
-    const requestQueue = await RequestQueue.open(`queue-${uniqueSuffix}`);
+
+    const requestQueue = await RequestQueue.open(`queue-${this.uniqueKey}`);
 
     try {
       let finalUrls = [...urls];
@@ -211,10 +235,10 @@ export class GenericCrawler {
       });
 
       // Gather results
-      const results = await this.crawlerInstance.getData();
+      const results = await (await this.getDataset()).getData();
 
       return {
-        data: results.items as GenericCrawlerResult[],
+        data: results.items,
         stats: {
           pagesProcessed: stats.requestsTotal,
           failedRequests: stats.requestsFailed,
@@ -226,6 +250,7 @@ export class GenericCrawler {
       throw error;
     } finally {
       await requestQueue.drop();
+      await (await this.getDataset()).drop();
       await this.cleanupCrawler();
     }
   }
