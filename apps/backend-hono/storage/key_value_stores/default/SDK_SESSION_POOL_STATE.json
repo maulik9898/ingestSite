@@ -1,0 +1,71 @@
+{
+  "usableSessionsCount": 2,
+  "retiredSessionsCount": 0,
+  "sessions": [
+    {
+      "id": "session_S4g0fy9OVc",
+      "cookieJar": {
+        "version": "tough-cookie@5.1.1",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2025-02-19T16:47:21.695Z",
+      "createdAt": "2025-02-19T15:57:21.695Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_GqipbcSenq",
+      "cookieJar": {
+        "version": "tough-cookie@5.1.1",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "cfzs_google-analytics_v4",
+            "value": "%7B%2297ca_pageviewCounter%22%3A%7B%22v%22%3A%221%22%7D%7D",
+            "expires": "2025-02-19T16:47:24.869Z",
+            "domain": "hono.dev",
+            "path": "/",
+            "secure": true,
+            "httpOnly": true,
+            "hostOnly": false,
+            "creation": "2025-02-19T15:57:24.871Z",
+            "lastAccessed": "2025-02-19T15:57:24.871Z"
+          },
+          {
+            "key": "cfz_google-analytics_v4",
+            "value": "%7B%2297ca_engagementDuration%22%3A%7B%22v%22%3A%220%22%2C%22e%22%3A1771516644488%7D%2C%2297ca_engagementStart%22%3A%7B%22v%22%3A%221739980644488%22%2C%22e%22%3A1771516644488%7D%2C%2297ca_counter%22%3A%7B%22v%22%3A%221%22%2C%22e%22%3A1771516644488%7D%2C%2297ca_ga4sid%22%3A%7B%22v%22%3A%22867470766%22%2C%22e%22%3A1739982444488%7D%2C%2297ca_session_counter%22%3A%7B%22v%22%3A%221%22%2C%22e%22%3A1771516644488%7D%2C%2297ca_ga4%22%3A%7B%22v%22%3A%2210614a33-dfaa-49c8-8774-c73e5940b04c%22%2C%22e%22%3A1771516644488%7D%2C%2297ca_let%22%3A%7B%22v%22%3A%221739980644488%22%2C%22e%22%3A1771516644488%7D%7D",
+            "expires": "2026-02-19T15:57:24.708Z",
+            "domain": "hono.dev",
+            "path": "/",
+            "secure": true,
+            "httpOnly": true,
+            "hostOnly": false,
+            "creation": "2025-02-19T15:57:24.871Z",
+            "lastAccessed": "2025-02-19T15:57:24.871Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2025-02-19T16:47:21.699Z",
+      "createdAt": "2025-02-19T15:57:21.699Z",
+      "usageCount": 2,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    }
+  ]
+}

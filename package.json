@@ -5,8 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:frontend": "pnpm -F frontend dev",
-    "dev:backend": "pnpm -F type build && pnpm -F frontend dev"
+    "dev": "nx run-many --target=dev -p ",
+    "dev:frontend": "nx dev frontend",
+    "dev:backend": "nx dev backend",
+    "dev:types": "nx dev types",
+    "dev:all": "nx run-many --target=dev --all",
+    "build": "nx run-many --target=build -p ",
+    "build:backend": "nx build backend",
+    "build:all": "nx run-many --target=build --all",
+    "check:all": "nx run-many --target=check --all"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +22,19 @@
     "node": ">=22.14.0"
   },
   "type": "module",
-  "packageManager": "pnpm@10.2.1"
+  "packageManager": "pnpm@10.2.1",
+  "devDependencies": {
+    "@nx/rsbuild": "20.4.4",
+    "@rsbuild/core": "1.1.10",
+    "nx": "20.4.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "better-sqlite3",
+      "core-js",
+      "esbuild",
+      "nx"
+    ]
+  }
 }

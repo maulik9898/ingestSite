@@ -42,3 +42,8 @@ screenshots
 reports
 coverage
 .env
+
+
+
+.nx/cache
+.nx/workspace-data

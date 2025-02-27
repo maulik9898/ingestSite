@@ -1,0 +1,44 @@
+{
+  "name": "backend-hono",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "NODE_ENV=production node ./dist/index.js ",
+
+    "tsc": "tsc",
+    "db:generate": "pnpm dlx @better-auth/cli generate",
+    "db:migrate": "pnpm dlx @better-auth/cli migrate",
+    "check": "biome check --write",
+    "format": "biome format --write"
+  },
+  "dependencies": {
+    "@crawlee/utils": "^3.12.2",
+    "@hono/node-server": "^1.13.8",
+    "@hono/zod-validator": "^0.4.3",
+    "@scalar/hono-api-reference": "^0.5.174",
+    "better-auth": "^1.1.18",
+    "better-sqlite3": "^11.8.1",
+    "cheerio": "^1.0.0",
+    "common-types": "workspace:*",
+    "crawlee": "^3.12.2",
+    "env-schema": "^6.0.1",
+    "hono": "^4.7.2",
+    "hono-openapi": "^0.4.4",
+    "playwright": "^1.50.1",
+    "turndown": "^7.2.0",
+    "zod": "^3.24.2",
+    "zod-openapi": "^4.2.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/cheerio": "^0.22.35",
+    "@types/node": "^20.11.17",
+    "@types/turndown": "^5.0.5",
+    "pino-pretty": "^13.0.0",
+    "tsx": "^4.7.1",
+    "typescript": "^5.7.3"
+  }
+}
